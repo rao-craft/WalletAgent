@@ -125,6 +125,9 @@ final class EmitTests: XCTestCase {
         XCTAssertTrue(hero.contains(".font(.system(size: 34, weight: .light, design: .serif))"))
         XCTAssertTrue(hero.contains(".animation(.easeOut(duration: 0.4), value: balance)"))
         XCTAssertNil(hero.range(of: "lineLimit|minimumScaleFactor|fixedSize", options: .regularExpression), "the balance wraps, as the original's does")
+        let card = try Fixture.text(result.paths, "WalletGroupCard.swift")
+        XCTAssertTrue(card.contains(".font(WalletLook.note)\n") && card.contains(".lineLimit(1)\n"))
+        XCTAssertFalse(card.contains("minimumScaleFactor"), "a group's name keeps the look's size, as the original's does")
         XCTAssertTrue(try Fixture.text(result.paths, "WalletView.swift").contains(".presentationBackground(.regularMaterial)"))
     }
 

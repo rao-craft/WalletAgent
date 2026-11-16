@@ -14,7 +14,6 @@ extension Template {
                     .font(WalletLook.note)
                     .foregroundStyle(WalletLook.foreground.opacity(0.6))
                     .lineLimit(1)
-                    .minimumScaleFactor(0.7)
                 Text(WalletStrings.groupDocuments(group.walletGroupDocuments))
                     .font(WalletLook.note2)
                     .foregroundStyle(WalletLook.foreground.opacity(0.6))

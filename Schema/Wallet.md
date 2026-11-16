@@ -280,6 +280,13 @@ mapped with no line for its role, a field the app's type does not have, a launch
 
 Newest first.
 
+### 2026-11-15 · a group's name at its look's size
+
+A group card's name no longer shrinks to fit. The card is 120 high, and its lines want about 87 of the 72 inside its
+padding; the name's scale factor of 0.7, which the original does not have, drew it 30% small and lifted the lines
+under it 3 points. The name now keeps `note`'s size, as the original's does, and the lines spread into the padding.
+Seer's `note = Font.brandNote` (serif 18 light, the original's `Text.note`) stays as it is.
+
 ### 2026-11-15 · the withdrawal as the original has it
 
 From the first reading of the Seer call on the iPhone beside the original. `withdraw: soon` takes a `withdraw` launch
