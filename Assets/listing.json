@@ -1,6 +1,6 @@
 {
   "name": "Wallet",
-  "tagline": "A credits wallet for any app: the balance and earnings, totals, group and exchange cards, cashouts and their sheets, from the app's own types.",
+  "tagline": "A credits wallet for any app: balance and earnings, totals, group and exchange cards, cashouts and their sheets, from the app's own types.",
   "category": "developer",
   "keywords": [
     "swiftui",
