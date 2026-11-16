@@ -27,7 +27,7 @@
       "type" : "array"
     },
     "look" : {
-      "description" : "look roles mapped to the app's names, one a line: `title = Font.brandTitle`; roles title, heading, note, note2 (Font), accent, foreground, secondaryForeground, secondaryBackground, positive (Color), gutter (CGFloat); an unmapped role is the system's",
+      "description" : "look roles mapped to the app's names, one a line: `title = Font.brandTitle`; roles title, heading, body, note, note2 (Font), accent, foreground, secondaryForeground, secondaryBackground, positive (Color), gutter (CGFloat); an unmapped role is the system's",
       "items" : {
         "type" : "string"
       },
@@ -59,7 +59,7 @@
       "type" : "array"
     },
     "withdraw" : {
-      "description" : "on (a Withdraw button, drawn when the page passes `withdraw:`, opening the withdrawal sheet; the default), soon (a faded button with \"Coming soon\") or off (none)",
+      "description" : "on (a Withdraw button, drawn when the page passes `withdraw:`, opening the withdrawal sheet; the default), soon (a faded button with \"Coming soon\"; a `withdraw` launch line still opens the sheet) or off (none)",
       "enum" : [
         "on",
         "soon",

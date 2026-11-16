@@ -20,11 +20,11 @@ line it reads. Everything above **Changes** describes the agent as it is; Change
 | `into` | no | the folder for the views, relative to the project; Components/Wallet when left out |
 | `mappings` | no | one line a role (wallet, group, exchange, transaction): `wallet: Wallet balance=balance earned=earned spent=spent cashedOut=cashedOut groups=groups exchanges=exchanges transactions=cashouts`; a bare path is read off the value, anything else is Swift that may name `value` |
 | `imports` | no | modules the conformances import, such as the package a mapped type is declared in |
-| `look` | no | look roles mapped to the app's names, one a line: `title = Font.brandTitle`; roles title, heading, note, note2 (Font), accent, foreground, secondaryForeground, secondaryBackground, positive (Color), gutter (CGFloat); an unmapped role is the system's |
+| `look` | no | look roles mapped to the app's names, one a line: `title = Font.brandTitle`; roles title, heading, body, note, note2 (Font), accent, foreground, secondaryForeground, secondaryBackground, positive (Color), gutter (CGFloat); an unmapped role is the system's |
 | `strings` | no | the words, one a line, `key = words` (quotes optional): `title = Wallet`, `amount = %.4f cr`, `groups.title = Model Groups`; every key and its default in Wallet.md |
 | `tuning` | no | numbers, sizes, symbols and motion, one a line: `eyebrowTracking = 2.5`, `groupCard = 150x120`, `availableSymbol = arrow.up.circle.fill`, `amountAnimation = .easeOut(duration: 0.4)`; every key in Wallet.md |
 | `launch` | no | the state the root opens in for a launch with `-destination <name>`, one a line: `wallet.exchanges = exchanges`; states wallet, exchanges, exchange, withdraw |
-| `withdraw` | no | on (a Withdraw button, drawn when the page passes `withdraw:`, opening the withdrawal sheet; the default), soon (a faded button with "Coming soon") or off (none) |
+| `withdraw` | no | on (a Withdraw button, drawn when the page passes `withdraw:`, opening the withdrawal sheet; the default), soon (a faded button with "Coming soon"; a `withdraw` launch line still opens the sheet) or off (none) |
 | `prefix` | no | what the kit's names start with instead of Wallet, when the app already has those names: `Credits` writes CreditsView |
 
 `directory` is filled by Craft with the project folder. The person's request and the host's model are offered
@@ -92,6 +92,7 @@ Maps a look role to the app's own name for it. A font role takes a `Font` expres
 | --- | --- | --- | --- |
 | `title` | Font | `.headline` | Sheet titles in the bar. |
 | `heading` | Font | `.title3` | The blocks' headings: the groups, the exchanges, the transactions. |
+| `body` | Font | `.title2` | The withdrawal's headings: "Connect a Bank" and "Withdrawal Initiated". |
 | `note` | Font | `.callout` | A card's or a row's name, and the loading line. |
 | `note2` | Font | `.footnote` | Dates, document counts and a detail row's words. |
 | `accent` | Color | `.accentColor` | "See All" and the controls that act. |
@@ -103,7 +104,7 @@ Maps a look role to the app's own name for it. A font role takes a `Font` expres
 
 ### `strings`: `key = words`
 
-Sets any word the views say. Quotes are optional; a quoted value reads `\n` and `\"`. `{amount}` stands for an amount as `amount` writes it and `{count}` for a whole number; a line must say the same `{…}` as the default. `amount` holds exactly one number format (`%.4f`, `%.0f`) with its unit before or after it; the balance shows its number and its unit apart, cut from it. A key ending `.one` is what its key says of one. A key marked with a part is written only with that part.
+Sets any word the views say. Quotes are optional; a quoted value reads `\n` and `\"`. `{amount}` stands for an amount as `amount` writes it and `{count}` for a whole number; a line must say the same `{…}` as the default. `amount` holds exactly one number format (`%.4f`, `%.0f`) with its unit before or after it; the balance shows its number and its unit apart, cut from it. A key ending `.one` is what its key says of one. A key marked with a part is written only with that part; the withdrawal sheet is written with `withdraw: on`, and with `soon` for a `withdraw` launch line.
 
 | Key | Default | What it is | Written with |
 | --- | --- | --- | --- |
@@ -145,24 +146,36 @@ Sets any word the views say. Quotes are optional; a quoted value reads `\n` and 
 | `exchange.saved` | -{amount} | How the savings read. | always |
 | `withdraw` | Withdraw | The withdraw button. | `withdraw: on` or `soon` |
 | `withdraw.soon` | Coming soon | Under the withdraw button while withdrawals are not open. | `withdraw: soon` |
-| `withdraw.title` | Withdraw | The withdrawal sheet's title. | `withdraw: on` |
-| `withdraw.bank` | Connect a Bank | The withdrawal sheet's heading. | `withdraw: on` |
-| `withdraw.privacy` | Your account details are encrypted\nand never stored on our servers. | Under the heading. | `withdraw: on` |
-| `withdraw.routing` | Routing Number | The routing number's label. | `withdraw: on` |
-| `withdraw.routing.placeholder` | 9-digit routing number | The routing number's placeholder. | `withdraw: on` |
-| `withdraw.account` | Account Number | The account number's label. | `withdraw: on` |
-| `withdraw.account.placeholder` | Account number | The account number's placeholder. | `withdraw: on` |
-| `withdraw.kind` | Account Type | The account type's label. | `withdraw: on` |
-| `withdraw.checking` | Checking | One account type. | `withdraw: on` |
-| `withdraw.savings` | Savings | The other account type. | `withdraw: on` |
-| `withdraw.amount` | AMOUNT | The eyebrow over the amount to withdraw. | `withdraw: on` |
-| `withdraw.available` | Available: {amount} | Under the amount: what can be withdrawn. | `withdraw: on` |
-| `withdraw.max` | Max | The button that fills in everything available. | `withdraw: on` |
-| `withdraw.confirm` | Continue | The button that sends the withdrawal. | `withdraw: on` |
+| `withdraw.bank.title` | Connect Bank | The withdrawal's first step's title: the bank account. | the withdrawal sheet |
+| `withdraw.bank` | Connect a Bank | The first step's heading. | the withdrawal sheet |
+| `withdraw.privacy` | Your account details are encrypted\nand never stored on our servers. | Under the heading. | the withdrawal sheet |
+| `withdraw.routing` | Routing Number | The routing number's label. | the withdrawal sheet |
+| `withdraw.routing.placeholder` | 9-digit routing number | The routing number's placeholder. | the withdrawal sheet |
+| `withdraw.account` | Account Number | The account number's label. | the withdrawal sheet |
+| `withdraw.account.placeholder` | Account number | The account number's placeholder. | the withdrawal sheet |
+| `withdraw.kind` | Account Type | The account type's label. | the withdrawal sheet |
+| `withdraw.checking` | Checking | One account type, and how the later steps name it. | the withdrawal sheet |
+| `withdraw.savings` | Savings | The other account type. | the withdrawal sheet |
+| `withdraw.continue` | Continue | The button that goes on from the account and from the amount. | the withdrawal sheet |
+| `withdraw.back` | Back | The back chevron's accessibility label, on the amount and the review. | the withdrawal sheet |
+| `withdraw.title` | Withdraw | The second step's title: the amount. | the withdrawal sheet |
+| `withdraw.amount` | AMOUNT | The eyebrow over the amount to withdraw. | the withdrawal sheet |
+| `withdraw.available` | Available: {amount} | Under the amount: what can be withdrawn. | the withdrawal sheet |
+| `withdraw.quarter` | 25% | The quick amount of a quarter of what is available. | the withdrawal sheet |
+| `withdraw.half` | 50% | The quick amount of half of it. | the withdrawal sheet |
+| `withdraw.max` | Max | The quick amount of all of it. | the withdrawal sheet |
+| `withdraw.review.title` | Review | The third step's title. | the withdrawal sheet |
+| `withdraw.review.amount` | WITHDRAWAL AMOUNT | The eyebrow over the amount in the review. | the withdrawal sheet |
+| `withdraw.review.to` | To | The review's row of the account. | the withdrawal sheet |
+| `withdraw.review.routing` | Routing | The review's row of the routing number. | the withdrawal sheet |
+| `withdraw.review.arrival` | Est. Arrival | The review's row of when the money arrives. | the withdrawal sheet |
+| `withdraw.review.arrives` | 3–5 business days | What that row says. | the withdrawal sheet |
+| `withdraw.confirm` | Confirm Withdrawal | The button that sends the withdrawal; faded with `withdraw: soon`, which sends nothing. | the withdrawal sheet |
 | `withdraw.failed` | The withdrawal did not go through. Try again. | When the app's withdrawal throws. | `withdraw: on` |
-| `withdraw.done.title` | Withdrawal Initiated | When the withdrawal is sent. | `withdraw: on` |
-| `withdraw.done.note` | Funds typically arrive in 3–5 business days. | Under it. | `withdraw: on` |
-| `withdraw.done` | Done | The button that closes the sheet. | `withdraw: on` |
+| `withdraw.done.title` | Initiated | The last step's title. | the withdrawal sheet |
+| `withdraw.done.heading` | Withdrawal Initiated | The last step's heading. | the withdrawal sheet |
+| `withdraw.done.note` | Funds typically arrive in 3–5 business days. | Under it. | the withdrawal sheet |
+| `withdraw.done` | Done | The button that closes the sheet. | the withdrawal sheet |
 
 ### `tuning`: `key = value`
 
@@ -190,10 +203,11 @@ Sets any number, size, symbol or motion the views use. A number is a decimal (`2
 | `transactionsEmptySymbol` | symbol | `tray` | The symbol over the transactions' empty line. |
 | `unavailableSymbol` | symbol | `wallet.bifold` | The symbol over "Wallet unavailable". |
 | `withdrawSymbol` | symbol | `arrow.down.to.line` | The symbol on the withdraw button. Written with a withdraw button. |
-| `bankSymbol` | symbol | `building.columns` | The symbol atop the withdrawal sheet. Written with `withdraw: on`. |
+| `bankSymbol` | symbol | `building.columns` | The symbol atop the withdrawal's first step, and in its account badge. Written with the withdrawal sheet. |
 | `design` | design | `serif` | The design of the amounts' and the cards' type. |
 | `material` | material | `regular` | The sheets' background material. |
 | `amountAnimation` | animation | `.easeOut(duration: 0.4)` | How the balance and the earnings change. |
+| `withdrawAnimation` | animation | `.easeInOut(duration: 0.26)` | How the withdrawal's steps change. Written with the withdrawal sheet. |
 
 ### `launch`: `destination = state`
 
@@ -204,8 +218,7 @@ Maps a `-destination <name>` launch argument (read as `UserDefaults.standard.str
 | `wallet` | The wallet, nothing over it. |
 | `exchanges` | Every exchange, the See All sheet open over the wallet. |
 | `exchange` | The newest exchange's sheet open over the wallet. |
-| `withdraw` | The withdrawal sheet open over the wallet; needs `withdraw: on` and the app's `withdraw:`. |
-
+| `withdraw` | The withdrawal sheet open over the wallet, on its first step: with `withdraw: on` when the page passes `withdraw:`, or with `soon`, its button still faded. |
 
 ## What it writes
 
@@ -216,14 +229,14 @@ Into `into` (`Components/Wallet` when left out), every file parsed with `swiftc 
 | `WalletProtocols.swift` | The four protocols the views read, a default for every requirement, and the kit's own value types |
 | `WalletValue.swift` | The conversions every mapped value goes through |
 | `WalletLook.swift`, `WalletStrings.swift`, `WalletLaunch.swift` | The look roles, every word and the launch state, from the call |
-| `WalletSupport.swift` | How amounts and dates read, the light tap, the small card's style |
+| `WalletSupport.swift` | How amounts and dates read, the taps, the looks the views repeat: the small card, a detail row, the outlined button |
 | `WalletView.swift` | The root a page shows: the head, the totals, the groups, the exchanges, the cashouts, and its sheets |
 | `WalletHeroView.swift`, `WalletTotalsView.swift`, `WalletSection.swift` | The head (balance and earnings), the three totals, a block with its heading |
 | `WalletGroupCard.swift`, `WalletExchangeCard.swift`, `WalletExchangeRow.swift`, `WalletTransactionRow.swift` | The cards and rows |
 | `WalletExchangesSheet.swift`, `WalletExchangeSheet.swift` | Every exchange (See All), and one exchange |
 | `WalletEyebrow.swift`, `WalletCloseButton.swift` | The tracked eyebrow, the close mark and the bar every screen wears |
-| `WalletWithdrawButton.swift` | With `withdraw: on` or `soon` |
-| `WalletWithdrawSheet.swift` | With `withdraw: on`: the bank account, the amount, the app's `withdraw`, done |
+| `WalletWithdrawButton.swift` | With `withdraw: on` or `soon` (faded, with "Coming soon" under it) |
+| `WalletWithdrawSheet.swift` | With `withdraw: on`, and with `soon` for a `withdraw` launch line: the bank account, the amount, the review, done; with `soon` its Confirm stays faded and nothing is sent |
 | `WalletPreviews.swift` | The sample wallet every `#Preview` draws |
 | `Conformances/<Type>+<Role>.swift` | One extension a mapping line |
 
@@ -266,6 +279,16 @@ mapped with no line for its role, a field the app's type does not have, a launch
 ## Changes
 
 Newest first.
+
+### 2026-11-15 · the withdrawal as the original has it
+
+From the first reading of the Seer call on the iPhone beside the original. `withdraw: soon` takes a `withdraw` launch
+line: the sheet is written for it and opened by it, and the button stays faded with "Coming soon" under it. The sheet
+is the original's four steps (Connect Bank, Withdraw, Review, Initiated), each sliding over the last, with the
+original's fields, account type, quick amounts, review card and outlined buttons; with `soon` its Confirm stays faded
+and nothing is sent. Its headings read a new look role, `body`. The balance wraps as the original's does, its unit on
+its last line, instead of shrinking onto one. The outlined button and a detail row are one template each, shared by
+every screen that draws them. Seer's call is now `withdraw: soon` with `wallet.withdraw = withdraw`.
 
 ### 2026-11-15 · first version
 

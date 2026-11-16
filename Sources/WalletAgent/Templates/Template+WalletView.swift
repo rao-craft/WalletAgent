@@ -4,9 +4,10 @@ extension Template {
     static let walletView = ##"""
     import SwiftUI
 
-    /// A wallet: the balance and the earnings, three totals, the groups that earned, the exchanges that spent (See
-    /// All opens them all), and the cashouts, with the sheets behind them. A spinner shows while `wallet` is nil;
-    /// `load` is called as it appears. It never routes: the app presents it and closes it.
+    /// A wallet: the balance and the earnings, the withdraw button the call asks for, three totals, the groups that
+    /// earned, the exchanges that spent (See All opens them all), and the cashouts, with the sheets behind them. A
+    /// spinner shows while `wallet` is nil; `load` is called as it appears. It never routes: the app presents it and
+    /// closes it.
     ///
     ///     WalletView(wallet: wallet.state.wallet, load: { try await wallet.load() })
     struct WalletView<Value: WalletRepresentable>: View {
@@ -20,7 +21,7 @@ extension Template {
         @State private var failed = false
         @State private var showsAll = false
         @State private var opened: WalletIndex?
-    //@if withdraw.on
+    //@if withdraw.sheet
         @State private var withdrawing = false
     //@endif
         @State private var launched = false
@@ -67,6 +68,13 @@ extension Template {
             .sheet(isPresented: $withdrawing) {
                 if let wallet, let withdraw {
                     WalletWithdrawSheet(available: wallet.walletAvailable, withdraw: withdraw)
+                }
+            }
+    //@endif
+    //@if withdraw.soon && withdraw.sheet
+            .sheet(isPresented: $withdrawing) {
+                if let wallet {
+                    WalletWithdrawSheet(available: wallet.walletAvailable)
                 }
             }
     //@endif
@@ -235,6 +243,10 @@ extension Template {
     //@if withdraw.on
                 case .withdraw:
                     if withdraw != nil { withdrawing = true }
+    //@endif
+    //@if withdraw.soon && withdraw.sheet
+                case .withdraw:
+                    withdrawing = true
     //@endif
                 }
             }

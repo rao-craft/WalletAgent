@@ -1,5 +1,5 @@
-//  WHAT: The template of `WalletSupport.swift`: how amounts and dates read, the light tap, the index a sheet opens
-//        by, and the small card's style.
+//  WHAT: The template of `WalletSupport.swift`: how amounts and dates read, the taps, the index a sheet opens by,
+//        and the looks the views repeat: the small card, a detail row, the outlined button.
 
 extension Template {
     static let walletSupport = ##"""
@@ -61,6 +61,15 @@ extension Template {
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
             #endif
         }
+    //@if withdraw.on
+
+        /// The firmer tap of sending a withdrawal.
+        @MainActor static func medium() {
+            #if os(iOS)
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            #endif
+        }
+    //@endif
     }
 
     /// Which item a sheet is open for.
@@ -77,5 +86,41 @@ extension Template {
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(WalletLook.foreground.opacity({{cardBorder}}), lineWidth: 1))
         }
     }
+
+    /// A row of a small card of details: its label faded, its value trailing.
+    struct WalletDetailRow: View {
+        let label: String
+        let value: String
+
+        var body: some View {
+            HStack {
+                Text(label)
+                    .foregroundStyle(WalletLook.foreground.opacity(0.6))
+                    .opacity(0.55)
+                Spacer()
+                Text(value)
+                    .foregroundStyle(WalletLook.foreground.opacity(0.6))
+            }
+            .font(WalletLook.note2)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 16)
+        }
+    }
+    //@if withdraw
+
+    /// The outlined look of the withdrawal's buttons: full width, 52 high, a 1 pt rounded border, faded while the
+    /// button cannot act.
+    struct WalletOutlined: ViewModifier {
+        let enabled: Bool
+
+        func body(content: Content) -> some View {
+            content
+                .foregroundStyle(WalletLook.foreground.opacity(enabled ? 1 : 0.3))
+                .frame(maxWidth: .infinity)
+                .frame(height: 52)
+                .background(RoundedRectangle(cornerRadius: 4).stroke(WalletLook.foreground.opacity(enabled ? 1 : 0.3), lineWidth: 1))
+        }
+    }
+    //@endif
     """##
 }

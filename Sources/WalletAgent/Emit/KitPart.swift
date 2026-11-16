@@ -10,7 +10,7 @@ struct KitPart: Sendable {
     let types: [String]
     /// The template; empty for a file an emitter makes from the call (`WalletLook`, `WalletStrings`, …).
     let template: String
-    /// A template flag without which it is never written: `withdraw.on`.
+    /// A template flag without which it is never written: `withdraw.sheet`.
     let flag: String?
     /// Whether it is a view the answer lists.
     let isView: Bool

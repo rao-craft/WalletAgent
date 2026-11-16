@@ -94,7 +94,7 @@ enum WalletApps {
                 let fee: Double = index % 3 == 0 ? 0 : 0.02
                 return CreditExchange(id: "x\\(index)", date: date, cost: cost, fee: fee, documents: 3, savings: 0.04)
             }
-            return Wallet(balance: 6.62, earned: 42.37, spent: 21.5, cashedOut: 12,
+            return Wallet(balance: 86.62, earned: 42.37, spent: 21.5, cashedOut: 12,
                           groups: [ModelEarning(name: "Space", documents: 10, earnings: 18.42),
                                    ModelEarning(name: "Cooking", documents: 1, earnings: 9.75),
                                    ModelEarning(name: "Unearned", documents: 2, earnings: 0)],
@@ -125,9 +125,14 @@ enum WalletApps {
                     if ImageRenderer(content: view).cgImage == nil { failed.append(name) } else { drawn.append(name) }
                 }
             }
+            func height<Content: View>(_ content: Content, width: CGFloat) -> Int {
+                let renderer = ImageRenderer(content: content.frame(width: width).fixedSize(horizontal: false, vertical: true))
+                renderer.scale = 1
+                return renderer.cgImage?.height ?? 0
+            }
 
             let wallet = WalletSamples.wallet
-            expect("balance", wallet.walletBalance == 6.62)
+            expect("balance", wallet.walletBalance == 86.62)
             expect("earnings", wallet.walletEarnings == 42.37)
             expect("available", abs(wallet.walletAvailable - 30.37) < 0.000_1)
             expect("groups", wallet.walletGroups.count == 3 && wallet.walletGroups[0].walletGroupDocuments == 10)
@@ -139,15 +144,20 @@ enum WalletApps {
             expect("available words", WalletStrings.available(WalletFormat.amount(30.37)) == "30.3700 cr available")
             expect("documents", WalletStrings.groupDocuments(1) == "1 document" && WalletStrings.groupDocuments(10) == "10 documents")
             expect("count", WalletStrings.allExchangesCount(9) == "9 exchanges" && WalletStrings.allExchangesCount(1) == "1 exchange")
-            let small = WalletFormat.balance(6.62), thousands = WalletFormat.balance(12_500), millions = WalletFormat.balance(2_500_000)
-            expect("balance parts", small.number == "6.6200" && small.unit == "cr")
+            let small = WalletFormat.balance(86.62), thousands = WalletFormat.balance(12_500), millions = WalletFormat.balance(2_500_000)
+            expect("balance parts", small.number == "86.6200" && small.unit == "cr")
             expect("thousands", thousands.number == "12.50" && thousands.unit == "K cr")
             expect("millions", millions.number == "2.50" && millions.unit == "M cr")
             expect("newest first", WalletFormat.newestFirst(wallet.walletTransactions) { $0.walletTransactionDate }.first?.walletTransactionAmount == 4)
             UserDefaults.standard.register(defaults: ["destination": "wallet.exchanges"])
             expect("launch", WalletLaunch.state == .exchanges)
+            UserDefaults.standard.register(defaults: ["destination": "wallet.withdraw"])
+            expect("launch withdraw", WalletLaunch.state == .withdraw)
             UserDefaults.standard.register(defaults: ["destination": "models"])
             expect("plain launch", WalletLaunch.state == nil)
+            // The balance wraps in a narrow column, as the original's does, where a one-line balance would shrink.
+            let hero = WalletHeroView(balance: wallet.walletBalance, earnings: 0, available: 0)
+            expect("the balance wraps", height(hero, width: 200) > height(hero, width: 600) + 20)
 
             draw("hero") { WalletHeroView(balance: wallet.walletBalance, earnings: wallet.walletEarnings, available: wallet.walletAvailable) }
             draw("hero, thousands") { WalletHeroView(balance: 12_500, earnings: 0, available: 0) }
@@ -158,11 +168,14 @@ enum WalletApps {
             draw("transaction row") { WalletTransactionRow(transaction: wallet.walletTransactions[0]) }
             draw("section") { WalletSection(title: WalletStrings.exchangesTitle, trailing: WalletStrings.exchangesSeeAll, onTrailing: {}) { Text("x") } }
             draw("eyebrow") { WalletEyebrow(text: WalletStrings.balanceEyebrow) }
+            draw("withdraw button") { WalletWithdrawButton() }
+            draw("detail row") { WalletDetailRow(label: WalletStrings.exchangeDocuments, value: "3") }
             draw("wallet", height: 874) { NavigationStack { WalletView(wallet: wallet, close: {}) } }
             draw("loading", height: 874) { NavigationStack { WalletView<Wallet>(wallet: nil) } }
             draw("all exchanges", height: 874) { WalletExchangesSheet(exchanges: wallet.walletExchanges) }
             draw("exchange", height: 874) { WalletExchangeSheet(exchange: wallet.walletExchanges[1]) }
             draw("exchange, no fee", height: 874) { WalletExchangeSheet(exchange: wallet.walletExchanges[0]) }
+            draw("withdrawal", height: 874) { WalletWithdrawSheet(available: wallet.walletAvailable) }
             draw("page", height: 874) { NavigationStack { WalletPage(wallet: WalletService(), layout: LayoutService()) } }
             draw("plain page", height: 874) { NavigationStack { WalletPlainPage(wallet: WalletService()) } }
             return (drawn, failed)

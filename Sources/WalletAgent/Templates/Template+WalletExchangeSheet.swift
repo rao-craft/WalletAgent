@@ -34,14 +34,15 @@ extension Template {
                             .padding(.horizontal, WalletLook.gutter)
 
                         VStack(spacing: 0) {
-                            row(WalletStrings.exchangeDocuments, "\(exchange.walletExchangeDocuments)")
+                            WalletDetailRow(label: WalletStrings.exchangeDocuments, value: "\(exchange.walletExchangeDocuments)")
                             if exchange.walletExchangeFee > 0 {
                                 Divider().padding(.horizontal, 16)
-                                row(WalletStrings.exchangeServiceFee, WalletFormat.amount(exchange.walletExchangeFee))
+                                WalletDetailRow(label: WalletStrings.exchangeServiceFee, value: WalletFormat.amount(exchange.walletExchangeFee))
                                 Divider().padding(.horizontal, 16)
-                                row(WalletStrings.exchangeTotal, WalletFormat.amount(exchange.walletExchangeTotal))
+                                WalletDetailRow(label: WalletStrings.exchangeTotal, value: WalletFormat.amount(exchange.walletExchangeTotal))
                                 Divider().padding(.horizontal, 16)
-                                row(WalletStrings.exchangeSavings, WalletStrings.exchangeSaved(WalletFormat.amount(exchange.walletExchangeSavings)))
+                                WalletDetailRow(label: WalletStrings.exchangeSavings,
+                                                value: WalletStrings.exchangeSaved(WalletFormat.amount(exchange.walletExchangeSavings)))
                             }
                         }
                         .modifier(WalletCardStyle())
@@ -54,20 +55,6 @@ extension Template {
             .presentationDetents([.large])
             .presentationDragIndicator(.visible)
             .presentationBackground(.{{material}})
-        }
-
-        private func row(_ label: String, _ value: String) -> some View {
-            HStack {
-                Text(label)
-                    .foregroundStyle(WalletLook.foreground.opacity(0.6))
-                    .opacity(0.55)
-                Spacer()
-                Text(value)
-                    .foregroundStyle(WalletLook.foreground.opacity(0.6))
-            }
-            .font(WalletLook.note2)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 16)
         }
     }
 

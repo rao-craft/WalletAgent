@@ -4,9 +4,9 @@ extension Template {
     static let walletHeroView = ##"""
     import SwiftUI
 
-    /// The wallet's head, two equal columns with a thin rule between: the balance on one line, shrinking to fit,
-    /// beside its unit (in thousands from a thousand, in millions from a million); the earnings, right-aligned, with
-    /// what can be cashed out in green. Both amounts roll to a new value.
+    /// The wallet's head, two equal columns with a thin rule between: the balance, wrapping when the column is too
+    /// narrow for it, with its unit on its last line (in thousands from a thousand, in millions from a million); the
+    /// earnings, right-aligned, with what can be cashed out in green. Both amounts roll to a new value.
     struct WalletHeroView: View {
         let balance: Double
         let earnings: Double
@@ -24,8 +24,6 @@ extension Template {
                         Text(parts.number)
                             .font(.system(size: {{balanceSize}}, weight: .light, design: .{{design}}))
                             .foregroundStyle(WalletLook.foreground)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.4)
                             .contentTransition(.numericText())
                             .animation({{amountAnimation}}, value: balance)
     //@if !unitLeads
@@ -67,12 +65,11 @@ extension Template {
             Text(text)
                 .font(.system(size: {{unitSize}}, weight: .light, design: .{{design}}))
                 .foregroundStyle(WalletLook.secondaryForeground)
-                .fixedSize()
         }
     }
 
     #Preview {
-        WalletHeroView(balance: 18.4, earnings: 31.2, available: 28.05)
+        WalletHeroView(balance: 86.62, earnings: 31.2, available: 28.05)
             .padding()
     }
     """##

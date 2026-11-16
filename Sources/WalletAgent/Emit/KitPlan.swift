@@ -14,12 +14,13 @@ struct KitPlan: Sendable {
     /// The parts written, in the catalog's order.
     var parts: [KitPart] { KitCatalog.parts.filter { $0.flag.map { flags.contains($0) } ?? true } }
 
-    /// `withdraw` (a button of either kind), `withdraw.on` or `withdraw.soon`; `launch.X` for each state a line
-    /// opens; `unitLeads`.
+    /// `withdraw` (a button of either kind), `withdraw.on` or `withdraw.soon`; `withdraw.sheet` when the withdrawal
+    /// sheet is written (`on`, or `soon` with a line that opens it); `launch.X` for each state a line opens; `unitLeads`.
     var flags: Set<String> {
         var flags: Set<String> = Set(launched.map { "launch." + $0 })
         if withdraw != .off { flags.insert("withdraw") }
         flags.insert("withdraw." + withdraw.rawValue)
+        if withdraw == .on || (withdraw == .soon && launched.contains("withdraw")) { flags.insert("withdraw.sheet") }
         if unitLeads { flags.insert("unitLeads") }
         return flags
     }

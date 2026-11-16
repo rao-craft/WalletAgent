@@ -27,6 +27,10 @@
     },
     {
       "kind" : "view",
+      "name" : "WalletWithdrawButton"
+    },
+    {
+      "kind" : "view",
       "name" : "WalletTotalsView"
     },
     {
@@ -56,6 +60,10 @@
     {
       "kind" : "view",
       "name" : "WalletExchangeSheet"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletWithdrawSheet"
     },
     {
       "kind" : "conformance",
@@ -98,6 +106,12 @@
       "kind" : "view",
       "name" : "WalletHeroView",
       "path" : "Components/Wallet/WalletHeroView.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletWithdrawButton",
+      "path" : "Components/Wallet/WalletWithdrawButton.swift",
       "state" : "written"
     },
     {
@@ -149,6 +163,12 @@
       "state" : "written"
     },
     {
+      "kind" : "view",
+      "name" : "WalletWithdrawSheet",
+      "path" : "Components/Wallet/WalletWithdrawSheet.swift",
+      "state" : "written"
+    },
+    {
       "kind" : "conformance",
       "name" : "Wallet",
       "path" : "Components/Wallet/Conformances/Wallet+Wallet.swift",
@@ -187,6 +207,7 @@
     "Components/Wallet/WalletEyebrow.swift",
     "Components/Wallet/WalletCloseButton.swift",
     "Components/Wallet/WalletHeroView.swift",
+    "Components/Wallet/WalletWithdrawButton.swift",
     "Components/Wallet/WalletTotalsView.swift",
     "Components/Wallet/WalletSection.swift",
     "Components/Wallet/WalletGroupCard.swift",
@@ -195,6 +216,7 @@
     "Components/Wallet/WalletTransactionRow.swift",
     "Components/Wallet/WalletExchangesSheet.swift",
     "Components/Wallet/WalletExchangeSheet.swift",
+    "Components/Wallet/WalletWithdrawSheet.swift",
     "Components/Wallet/WalletView.swift",
     "Components/Wallet/WalletPreviews.swift",
     "Components/Wallet/Conformances/Wallet+Wallet.swift",
@@ -213,6 +235,7 @@
     "WalletEyebrow",
     "WalletCloseButton",
     "WalletHeroView",
+    "WalletWithdrawButton",
     "WalletTotalsView",
     "WalletSection",
     "WalletGroupCard",
@@ -220,6 +243,7 @@
     "WalletExchangeRow",
     "WalletTransactionRow",
     "WalletExchangesSheet",
-    "WalletExchangeSheet"
+    "WalletExchangeSheet",
+    "WalletWithdrawSheet"
   ]
 }

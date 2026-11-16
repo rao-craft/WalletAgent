@@ -16,7 +16,8 @@ enum KitCatalog {
         KitPart("WalletLook", view: false),
         KitPart("WalletStrings", view: false),
         KitPart("WalletLaunch", view: false),
-        KitPart("WalletSupport", types: ["WalletFormat", "WalletHaptic", "WalletIndex", "WalletCardStyle"], view: false, Template.walletSupport),
+        KitPart("WalletSupport", types: ["WalletFormat", "WalletHaptic", "WalletIndex", "WalletCardStyle", "WalletDetailRow", "WalletOutlined"],
+                view: false, Template.walletSupport),
         KitPart("WalletEyebrow", Template.walletEyebrow),
         KitPart("WalletCloseButton", types: ["WalletCloseButton", "WalletSheetBar"], Template.walletCloseButton),
         KitPart("WalletHeroView", Template.walletHeroView),
@@ -29,7 +30,7 @@ enum KitCatalog {
         KitPart("WalletTransactionRow", Template.walletTransactionRow),
         KitPart("WalletExchangesSheet", Template.walletExchangesSheet),
         KitPart("WalletExchangeSheet", Template.walletExchangeSheet),
-        KitPart("WalletWithdrawSheet", types: ["WalletWithdrawSheet", "WalletWithdrawal"], flag: "withdraw.on", Template.walletWithdrawSheet),
+        KitPart("WalletWithdrawSheet", types: ["WalletWithdrawSheet", "WalletWithdrawal"], flag: "withdraw.sheet", Template.walletWithdrawSheet),
         KitPart("WalletView", Template.walletView),
         KitPart("WalletPreviews", types: ["WalletSample"], view: false, Template.walletPreviews),
     ]

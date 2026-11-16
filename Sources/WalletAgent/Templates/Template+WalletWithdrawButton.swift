@@ -16,8 +16,8 @@ extension Template {
             VStack(spacing: 8) {
                 Button {
     //@if withdraw.on
-                    WalletHaptic.light()
                     action()
+                    WalletHaptic.light()
     //@endif
                 } label: {
                     HStack(spacing: 8) {
@@ -26,19 +26,14 @@ extension Template {
                         Text(WalletStrings.withdraw)
                             .font(.system(size: 16, weight: .semibold, design: .{{design}}))
                     }
-                    .foregroundStyle(WalletLook.foreground.opacity(isEnabled ? 1 : 0.3))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 52)
-                    .overlay(RoundedRectangle(cornerRadius: 4).stroke(WalletLook.foreground.opacity(isEnabled ? 1 : 0.3), lineWidth: 1))
-                    .contentShape(Rectangle())
+                    .modifier(WalletOutlined(enabled: isEnabled))
                 }
-                .buttonStyle(.plain)
                 .disabled(!isEnabled)
     //@if withdraw.soon
                 Text(WalletStrings.withdrawSoon)
-                    .font(.system(size: 11, design: .{{design}}))
-                    .italic()
+                    .font(.system(size: 11, weight: .regular, design: .{{design}}))
                     .foregroundStyle(WalletLook.secondaryForeground)
+                    .italic()
     //@endif
             }
         }

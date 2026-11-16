@@ -65,11 +65,11 @@ public struct WalletAgent: GraniteAgentPackage {
         "into": "the folder for the views, relative to the project; Components/Wallet when left out",
         "mappings": "one line a role (wallet, group, exchange, transaction): `wallet: Wallet balance=balance earned=earned spent=spent cashedOut=cashedOut groups=groups exchanges=exchanges transactions=cashouts`; a bare path is read off the value, anything else is Swift that may name `value`",
         "imports": "modules the conformances import, such as the package a mapped type is declared in",
-        "look": "look roles mapped to the app's names, one a line: `title = Font.brandTitle`; roles title, heading, note, note2 (Font), accent, foreground, secondaryForeground, secondaryBackground, positive (Color), gutter (CGFloat); an unmapped role is the system's",
+        "look": "look roles mapped to the app's names, one a line: `title = Font.brandTitle`; roles title, heading, body, note, note2 (Font), accent, foreground, secondaryForeground, secondaryBackground, positive (Color), gutter (CGFloat); an unmapped role is the system's",
         "strings": "the words, one a line, `key = words` (quotes optional): `title = Wallet`, `amount = %.4f cr`, `groups.title = Model Groups`; every key and its default in Wallet.md",
         "tuning": "numbers, sizes, symbols and motion, one a line: `eyebrowTracking = 2.5`, `groupCard = 150x120`, `availableSymbol = arrow.up.circle.fill`, `amountAnimation = .easeOut(duration: 0.4)`; every key in Wallet.md",
         "launch": "the state the root opens in for a launch with `-destination <name>`, one a line: `wallet.exchanges = exchanges`; states wallet, exchanges, exchange, withdraw",
-        "withdraw": "on (a Withdraw button, drawn when the page passes `withdraw:`, opening the withdrawal sheet; the default), soon (a faded button with \"Coming soon\") or off (none)",
+        "withdraw": "on (a Withdraw button, drawn when the page passes `withdraw:`, opening the withdrawal sheet; the default), soon (a faded button with \"Coming soon\"; a `withdraw` launch line still opens the sheet) or off (none)",
         "prefix": "what the kit's names start with instead of Wallet, when the app already has those names: `Credits` writes CreditsView",
     ]
     public static let guide = """
@@ -93,7 +93,8 @@ public struct WalletAgent: GraniteAgentPackage {
         `strings` sets any word by key (`amount = %.4f cr`, `balance.eyebrow = CREDIT BALANCE`, `groups.title = \
         Model Groups`, `exchange.title = Inference`; `{amount}` and `{count}` stand for what is said); `tuning` sets \
         any number, size, symbol or motion by key (`groupCard = 150x120`, `eyebrowTracking = 2.5`); `launch` opens a \
-        state for `-destination <name>` (`wallet.exchanges = exchanges`: the See All sheet open). Example, a reading \
+        state for `-destination <name>` (`wallet.exchanges = exchanges`: the See All sheet open; `wallet.withdraw = \
+        withdraw`: the withdrawal sheet open, even with `withdraw: soon`). Example, a reading \
         app that pays authors in points, with its own types: {"mappings": ["wallet: Account balance=points \
         earned=lifetimePoints spent=spentPoints cashedOut=redeemed groups=shelves exchanges=purchases", "group: \
         Shelf name=title documents=books earnings=points", "exchange: Purchase title=bookTitle date=boughtAt \
@@ -163,8 +164,8 @@ public struct WalletAgent: GraniteAgentPackage {
         keyed("launch", input.launch, { LaunchLine.parse($0, states: WalletTables.launch) }, key: { $0.destination }) {
             launches.append((destination: $0.destination, state: $0.state))
         }
-        if withdraw != .on, launches.contains(where: { $0.state.name == "withdraw" }) {
-            problems.append("launch: `withdraw` opens the withdrawal sheet, which `withdraw: \(withdraw.rawValue)` leaves out: say `withdraw: on`, or drop the line")
+        if withdraw == .off, launches.contains(where: { $0.state.name == "withdraw" }) {
+            problems.append("launch: `withdraw` opens the withdrawal sheet, which `withdraw: off` leaves out: say `withdraw: on` or `soon`, or drop the line")
         }
 
         // The prefix and the modules.
@@ -331,7 +332,12 @@ public struct WalletAgent: GraniteAgentPackage {
         }
         for (key, _) in strings.sorted(by: { $0.key < $1.key }) {
             guard let part = WalletTables.strings.first(where: { $0.key == key })?.part, !flags.contains(part) else { continue }
-            notes.append("`\(key)` is said only with `withdraw: \(part == "withdraw" ? "on` or `soon" : String(part.dropFirst("withdraw.".count)))`, so it is not written.")
+            let when = switch part {
+            case "withdraw": "with `withdraw: on` or `soon`"
+            case "withdraw.sheet": "in the withdrawal sheet, written with `withdraw: on`, or `soon` with a `withdraw` launch line"
+            default: "with `withdraw: \(part.dropFirst("withdraw.".count))`"
+            }
+            notes.append("`\(key)` is said only \(when), so it is not written.")
         }
         return WalletResult(path: written.first, paths: written + stale.map(\.path), views: views,
                             conformances: mappings.map { "\($0.type): \($0.role.rawValue)" }, roots: [root], notes: notes,

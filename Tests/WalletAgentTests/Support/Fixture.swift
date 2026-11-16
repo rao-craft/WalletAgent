@@ -43,12 +43,19 @@ enum Fixture {
                          "Service Fee", "Total Cost", "Savings", "Loading wallet(…|\\.\\.\\.)"]),
     ]
 
-    /// Every word the spec quotes for the Wallet screen and its sheets, as the code says it: a word that carries a
-    /// value is checked by its words around the value (`"30.3700 cr available"` is ` available`).
+    /// Every word the spec quotes for the Wallet screen and its sheets, the withdrawal's among them, as the code says
+    /// it: a word that carries a value is checked by its words around the value (`"30.3700 cr available"` is
+    /// ` available`).
     static let quoted = ["Wallet", "%.4f cr", "CREDIT BALANCE", "EARNINGS", "\"cr\"", " available", "Earned", "Spent", "Cashed Out",
                          "Model Groups", "documents", "Credit Exchanges", "See All", "Inference", "fee ", "Transactions", "Cashout",
                          "+ ", "Loading wallet…", "All Exchanges", "TOTAL EXCHANGES", " exchanges", "COST", "Documents", "Service Fee",
-                         "Total Cost", "Savings", "\"-\\("]
+                         "Total Cost", "Savings", "\"-\\(", "Withdraw", "Coming soon", "No group earnings yet", "No inference exchanges yet",
+                         "No cashouts recorded", "Wallet unavailable", "Connect Bank", "Connect a Bank",
+                         "Your account details are encrypted\\nand never stored on our servers.", "Routing Number",
+                         "9-digit routing number", "Account Number", "Account number", "Account Type", "Checking", "Savings",
+                         "Continue", "\"Review\"", "\"Initiated\"", "AMOUNT", "Available: ", "\"25%\"", "\"50%\"", "\"Max\"",
+                         "WITHDRAWAL AMOUNT", "\"To\"", "\"Routing\"", "Est. Arrival", "3–5 business days", "Confirm Withdrawal",
+                         "Withdrawal Initiated", "Funds typically arrive in 3–5 business days.", "\"Done\"", "  ·  ", "•••• "]
 
     /// SeerKit as the Seer call reads it: the wallet and its lists, in a package of their own.
     static let seerKit = """

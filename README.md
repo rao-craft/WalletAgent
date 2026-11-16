@@ -19,10 +19,11 @@ with the turn.
 
 ## What you get
 
-- **The whole wallet.** The balance on one line beside its unit and the earnings with what can be cashed out, split
-  by a thin rule; earned, spent and cashed out in three cells; the groups and the exchanges as small bordered cards in
-  rows that scroll sideways; the cashouts, newest first; All Exchanges and one exchange's sheet with its fee, total and
-  savings. A withdrawal sheet too, when you want one.
+- **The whole wallet.** The balance beside its unit and the earnings with what can be cashed out, split by a thin
+  rule; earned, spent and cashed out in three cells; the groups and the exchanges as small bordered cards in rows that
+  scroll sideways; the cashouts, newest first; All Exchanges and one exchange's sheet with its fee, total and savings.
+  A Withdraw button too when you want one, open or faded with "Coming soon", and the withdrawal behind it: the bank
+  account, the amount, a review, done.
 - **Your own types, shown as they are.** One line a type says which field is the balance, the name or the cost; the
   views read protocols, and your types are made to conform to them, without a change to the types themselves.
 - **Your look and your words.** Map the fonts, colours and margin to your design's names. Every word is a key with a
@@ -30,8 +31,8 @@ with the turn.
 - **Views ready to drop in.** They take values and closures, hold no global state and never route, so your app keeps
   its own navigation and presents the wallet as it likes. Every view has a `#Preview`, and every icon-only control is
   labelled for VoiceOver.
-- **Screens reachable from a launch.** A `-destination` launch argument opens the wallet on its See All sheet or an
-  exchange, already up, for UI tests and screenshots.
+- **Screens reachable from a launch.** A `-destination` launch argument opens the wallet on its See All sheet, an
+  exchange or the withdrawal, already up, for UI tests and screenshots.
 
 ## How it works
 

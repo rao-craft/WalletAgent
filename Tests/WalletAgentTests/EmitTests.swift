@@ -22,9 +22,9 @@ final class EmitTests: XCTestCase {
             "WalletSupport.swift", "WalletEyebrow.swift", "WalletCloseButton.swift", "WalletHeroView.swift", "WalletTotalsView.swift",
             "WalletSection.swift", "WalletGroupCard.swift", "WalletExchangeCard.swift", "WalletExchangeRow.swift",
             "WalletTransactionRow.swift", "WalletExchangesSheet.swift", "WalletExchangeSheet.swift", "WalletView.swift",
-            "WalletPreviews.swift", "Wallet+Wallet.swift", "ModelEarning+Group.swift", "CreditExchange+Exchange.swift",
-            "Cashout+Transaction.swift",
-        ], "withdraw: off writes no withdraw button and no withdrawal sheet")
+            "WalletPreviews.swift", "WalletWithdrawButton.swift", "WalletWithdrawSheet.swift", "Wallet+Wallet.swift",
+            "ModelEarning+Group.swift", "CreditExchange+Exchange.swift", "Cashout+Transaction.swift",
+        ], "withdraw: soon writes the faded button, and the sheet for the line that opens it")
         let conformance = try Fixture.text(result.paths, "Wallet+Wallet.swift")
         XCTAssertEqual(conformance, """
         import Foundation
@@ -60,7 +60,27 @@ final class EmitTests: XCTestCase {
         }
         XCTAssertNil(code.range(of: #"\b23\.75\b|\b0\.235\b|\b0\.145\b|\b0\.175\b"#, options: .regularExpression),
                      "B-wallet-11 is the mock wallet's: the kit's samples never stand in for it")
-        XCTAssertNil(code.range(of: "Withdraw|Coming soon", options: .regularExpression), "B-wallet-1: no withdrawal on Seer's wallet")
+    }
+
+    /// The withdrawal as the original draws it: the button faded with "Coming soon" under it, and the Connect Bank
+    /// sheet a `wallet.withdraw` launch opens, which sends nothing.
+    func testTheSeerCallsWithdrawalIsTheOriginals() throws {
+        let result = try write(try Fixture.example("seer"), into: try Fixture.folder())
+        let root = try Fixture.text(result.paths, "WalletView.swift")
+        XCTAssertTrue(root.contains("WalletWithdrawButton()"), "the faded button")
+        XCTAssertTrue(root.contains("WalletWithdrawSheet(available: wallet.walletAvailable)"), "the sheet, with no closure to send to")
+        XCTAssertTrue(root.contains("case .withdraw:\n                withdrawing = true"), "opened for the launch")
+        let button = try Fixture.text(result.paths, "WalletWithdrawButton.swift")
+        XCTAssertTrue(button.contains(".modifier(WalletOutlined(enabled: isEnabled))"))
+        XCTAssertTrue(button.contains(".font(.system(size: 11, weight: .regular, design: .serif))"))
+        XCTAssertTrue(button.contains("false\n    }"), "never enabled")
+        let sheet = try Fixture.text(result.paths, "WalletWithdrawSheet.swift")
+        XCTAssertTrue(sheet.contains("action(WalletStrings.withdrawConfirm, enabled: false) {}"), "nothing is sent")
+        XCTAssertNil(sheet.range(of: "let withdraw:|withdraw: \\{|func send", options: .regularExpression), "no closure, nothing to send")
+        XCTAssertTrue(sheet.contains(".animation(.easeInOut(duration: 0.26), value: step)"))
+        XCTAssertTrue(sheet.contains(".font(WalletLook.body)"))
+        XCTAssertTrue(sheet.contains("Image(systemName: \"building.columns\")"))
+        XCTAssertEqual(result.roots, ["WalletView(wallet: Wallet?, load: (() async throws -> Void)? = nil, close: (() -> Void)? = nil)"])
     }
 
     /// Every word the spec quotes for Wallet, All Exchanges and an exchange's sheet is in the Seer call's output.
@@ -80,6 +100,10 @@ final class EmitTests: XCTestCase {
             #"static func exchangeSaved(_ amount: String) -> String { "-\(amount)" }"#,
             #"static var balanceNumber: String { "%.4f" }"#,
             #"static var balanceUnit: String { "cr" }"#,
+            #"static var withdrawSoon: String { "Coming soon" }"#,
+            #"static var withdrawBankTitle: String { "Connect Bank" }"#,
+            #"static var withdrawPrivacy: String { "Your account details are encrypted\nand never stored on our servers." }"#,
+            #"static func withdrawAvailable(_ amount: String) -> String { "Available: \(amount)" }"#,
         ] {
             XCTAssertTrue(strings.contains(line), line)
         }
@@ -88,18 +112,19 @@ final class EmitTests: XCTestCase {
     func testTheSeerCallsLookAndLaunchAreTheAppsNames() throws {
         let result = try write(try Fixture.example("seer"), into: try Fixture.folder())
         let look = try Fixture.text(result.paths, "WalletLook.swift")
-        for line in ["static var title: Font { Font.brandTitle }", "static var note2: Font { Font.brandNote2 }",
-                     "static var accent: Color { Color.accent }", "static var gutter: CGFloat { CGFloat.layer7 }",
-                     "static var positive: Color { .green }"] {
+        for line in ["static var title: Font { Font.brandTitle }", "static var body: Font { Font.brandBody }",
+                     "static var note2: Font { Font.brandNote2 }", "static var accent: Color { Color.accent }",
+                     "static var gutter: CGFloat { CGFloat.layer7 }", "static var positive: Color { .green }"] {
             XCTAssertTrue(look.contains(line), line)
         }
         let launch = try Fixture.text(result.paths, "WalletLaunch.swift")
         XCTAssertTrue(launch.contains(#"switch UserDefaults.standard.string(forKey: "destination") {"#))
         XCTAssertTrue(launch.contains(#"case "wallet.exchanges": return .exchanges"#))
-        XCTAssertFalse(launch.contains("case withdraw"), "no withdrawal state without the withdrawal")
+        XCTAssertTrue(launch.contains(#"case "wallet.withdraw": return .withdraw"#))
         let hero = try Fixture.text(result.paths, "WalletHeroView.swift")
         XCTAssertTrue(hero.contains(".font(.system(size: 34, weight: .light, design: .serif))"))
         XCTAssertTrue(hero.contains(".animation(.easeOut(duration: 0.4), value: balance)"))
+        XCTAssertNil(hero.range(of: "lineLimit|minimumScaleFactor|fixedSize", options: .regularExpression), "the balance wraps, as the original's does")
         XCTAssertTrue(try Fixture.text(result.paths, "WalletView.swift").contains(".presentationBackground(.regularMaterial)"))
     }
 
@@ -121,22 +146,38 @@ final class EmitTests: XCTestCase {
         call.withdraw = .soon
         let soon = try write(call, into: try Fixture.folder())
         XCTAssertTrue(names(soon).contains("WalletWithdrawButton.swift"))
-        XCTAssertFalse(names(soon).contains("WalletWithdrawSheet.swift"))
-        XCTAssertTrue(try Fixture.text(soon.paths, "WalletStrings.swift").contains(#"static var withdrawSoon: String { "Coming soon" }"#))
+        XCTAssertFalse(names(soon).contains("WalletWithdrawSheet.swift"), "no line opens the sheet, and no button can")
+        let soonStrings = try Fixture.text(soon.paths, "WalletStrings.swift")
+        XCTAssertTrue(soonStrings.contains(#"static var withdrawSoon: String { "Coming soon" }"#))
+        XCTAssertFalse(soonStrings.contains("withdrawBank"), "no word of the sheet without it")
         XCTAssertTrue(try Fixture.text(soon.paths, "WalletView.swift").contains("WalletWithdrawButton()"))
+        XCTAssertFalse(try Fixture.text(soon.paths, "WalletLaunch.swift").contains("case withdraw"))
+
+        call.launch = ["wallet.withdraw = withdraw"]
+        let launched = try write(call, into: try Fixture.folder())
+        XCTAssertTrue(names(launched).isSuperset(of: ["WalletWithdrawButton.swift", "WalletWithdrawSheet.swift"]), "soon with the line writes the sheet")
+        XCTAssertEqual(launched.roots, ["WalletView(wallet: WalletItem?, load: (() async throws -> Void)? = nil, close: (() -> Void)? = nil)"])
+        XCTAssertTrue(try Fixture.text(launched.paths, "WalletLaunch.swift").contains(#"case "wallet.withdraw": return .withdraw"#))
+        XCTAssertFalse(try Fixture.text(launched.paths, "WalletStrings.swift").contains("withdrawFailed"), "nothing is sent, so nothing fails")
+        XCTAssertEqual(launched.notes.filter { $0.contains("withdraw") }, [])
 
         call.withdraw = .on
-        call.launch = ["wallet.withdraw = withdraw"]
         let on = try write(call, into: try Fixture.folder())
         XCTAssertTrue(names(on).isSuperset(of: ["WalletWithdrawButton.swift", "WalletWithdrawSheet.swift"]))
         XCTAssertEqual(on.roots, ["WalletView(wallet: WalletItem?, load: (() async throws -> Void)? = nil, withdraw: ((WalletWithdrawal) async throws -> Void)? = nil, close: (() -> Void)? = nil)"])
         XCTAssertFalse(try Fixture.text(on.paths, "WalletStrings.swift").contains("withdrawSoon"))
+        XCTAssertTrue(try Fixture.text(on.paths, "WalletWithdrawSheet.swift").contains("try await withdraw(WalletWithdrawal("))
         XCTAssertTrue(try Fixture.text(on.paths, "WalletLaunch.swift").contains(#"case "wallet.withdraw": return .withdraw"#))
 
         call.withdraw = .off
         XCTAssertThrowsError(try write(call, into: try Fixture.folder())) { error in
-            XCTAssertTrue("\(error)".contains("`withdraw` opens the withdrawal sheet, which `withdraw: off` leaves out"), "\(error)")
+            XCTAssertTrue("\(error)".contains("`withdraw` opens the withdrawal sheet, which `withdraw: off` leaves out: say `withdraw: on` or `soon`"), "\(error)")
         }
+        call.launch = nil
+        call.strings = ["withdraw.bank.title = Link a Bank", "withdraw.soon = Later"]
+        let notes = try write(call, into: try Fixture.folder()).notes
+        XCTAssertTrue(notes.contains("`withdraw.bank.title` is said only in the withdrawal sheet, written with `withdraw: on`, or `soon` with a `withdraw` launch line, so it is not written."), "\(notes)")
+        XCTAssertTrue(notes.contains("`withdraw.soon` is said only with `withdraw: soon`, so it is not written."), "\(notes)")
     }
 
     /// A later call into the same folder takes away what it no longer writes: the withdrawal, a conformance.
