@@ -1,0 +1,27 @@
+{
+  "into": "Shared/Views/Points",
+  "mappings": [
+    "wallet: Account balance=points earned=lifetimePoints spent=spentPoints cashedOut=redeemed groups=shelves exchanges=purchases transactions=payouts",
+    "group: Shelf name=title documents=books earnings=points",
+    "exchange: Purchase title=bookTitle date=boughtAt cost=price",
+    "transaction: Payout date=paidAt amount=Double(value.cents) / 100"
+  ],
+  "look": ["accent = Color.orange", "gutter = 20"],
+  "strings": [
+    "title = Points",
+    "amount = %.0f pts",
+    "balance.eyebrow = POINTS",
+    "balance.thousands = K pts",
+    "balance.millions = M pts",
+    "groups.title = Your Shelves",
+    "exchanges.title = Purchases",
+    "transactions.title = Payouts",
+    "transaction.title = Payout",
+    "withdraw = Redeem",
+    "withdraw.title = Redeem Points"
+  ],
+  "tuning": ["groupCard = 160x110", "design = rounded", "material = thin", "availableSymbol = star.circle.fill"],
+  "launch": ["points = wallet", "points.redeem = withdraw"],
+  "withdraw": "on",
+  "prefix": "Points"
+}

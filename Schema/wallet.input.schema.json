@@ -1,0 +1,73 @@
+{
+  "$id" : "https://github.com/rao-craft/WalletAgent/blob/main/Schema/wallet.input.schema.json",
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties" : false,
+  "description" : "Every field a call to wallet may give; `directory` is Craft's, never the model's.",
+  "properties" : {
+    "directory" : {
+      "description" : "the project folder, filled by Craft; never the model's",
+      "type" : "string"
+    },
+    "imports" : {
+      "description" : "modules the conformances import, such as the package a mapped type is declared in",
+      "items" : {
+        "type" : "string"
+      },
+      "type" : "array"
+    },
+    "into" : {
+      "description" : "the folder for the views, relative to the project; Components/Wallet when left out",
+      "type" : "string"
+    },
+    "launch" : {
+      "description" : "the state the root opens in for a launch with `-destination <name>`, one a line: `wallet.exchanges = exchanges`; states wallet, exchanges, exchange, withdraw",
+      "items" : {
+        "type" : "string"
+      },
+      "type" : "array"
+    },
+    "look" : {
+      "description" : "look roles mapped to the app's names, one a line: `title = Font.brandTitle`; roles title, heading, note, note2 (Font), accent, foreground, secondaryForeground, secondaryBackground, positive (Color), gutter (CGFloat); an unmapped role is the system's",
+      "items" : {
+        "type" : "string"
+      },
+      "type" : "array"
+    },
+    "mappings" : {
+      "description" : "one line a role (wallet, group, exchange, transaction): `wallet: Wallet balance=balance earned=earned spent=spent cashedOut=cashedOut groups=groups exchanges=exchanges transactions=cashouts`; a bare path is read off the value, anything else is Swift that may name `value`",
+      "items" : {
+        "type" : "string"
+      },
+      "type" : "array"
+    },
+    "prefix" : {
+      "description" : "what the kit's names start with instead of Wallet, when the app already has those names: `Credits` writes CreditsView",
+      "type" : "string"
+    },
+    "strings" : {
+      "description" : "the words, one a line, `key = words` (quotes optional): `title = Wallet`, `amount = %.4f cr`, `groups.title = Model Groups`; every key and its default in Wallet.md",
+      "items" : {
+        "type" : "string"
+      },
+      "type" : "array"
+    },
+    "tuning" : {
+      "description" : "numbers, sizes, symbols and motion, one a line: `eyebrowTracking = 2.5`, `groupCard = 150x120`, `availableSymbol = arrow.up.circle.fill`, `amountAnimation = .easeOut(duration: 0.4)`; every key in Wallet.md",
+      "items" : {
+        "type" : "string"
+      },
+      "type" : "array"
+    },
+    "withdraw" : {
+      "description" : "on (a Withdraw button, drawn when the page passes `withdraw:`, opening the withdrawal sheet; the default), soon (a faded button with \"Coming soon\") or off (none)",
+      "enum" : [
+        "on",
+        "soon",
+        "off"
+      ],
+      "type" : "string"
+    }
+  },
+  "title" : "What wallet takes",
+  "type" : "object"
+}

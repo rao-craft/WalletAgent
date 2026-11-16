@@ -1,0 +1,85 @@
+{
+  "$id" : "https://github.com/rao-craft/WalletAgent/blob/main/Schema/wallet.answer.schema.json",
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "allOf" : [
+    {
+      "$ref" : "https://github.com/riteshpakala/Granite/blob/main/Schema/granite-agent-answer.schema.json"
+    }
+  ],
+  "description" : "A granite-answer/1 answer; what wallet makes and expects is one of its own kinds, and it names its views, its conformances and the root's initializer beside them.",
+  "properties" : {
+    "conformances" : {
+      "description" : "one entry a mapping line: `Type: role`",
+      "items" : {
+        "type" : "string"
+      },
+      "type" : "array"
+    },
+    "expected" : {
+      "items" : {
+        "properties" : {
+          "kind" : {
+            "enum" : [
+              "view",
+              "conformance"
+            ],
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [
+          "kind",
+          "name"
+        ],
+        "type" : "object"
+      },
+      "type" : "array"
+    },
+    "made" : {
+      "items" : {
+        "properties" : {
+          "kind" : {
+            "enum" : [
+              "view",
+              "conformance"
+            ],
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [
+          "kind",
+          "name"
+        ],
+        "type" : "object"
+      },
+      "type" : "array"
+    },
+    "notes" : {
+      "description" : "what the app still has to do, or what the call left to a default",
+      "items" : {
+        "type" : "string"
+      },
+      "type" : "array"
+    },
+    "roots" : {
+      "description" : "the root view's initializer, as a page body calls it: `WalletView(wallet: Wallet?, load: (() async throws -> Void)? = nil, close: (() -> Void)? = nil)`",
+      "items" : {
+        "type" : "string"
+      },
+      "type" : "array"
+    },
+    "views" : {
+      "description" : "the view types written, the root first",
+      "items" : {
+        "type" : "string"
+      },
+      "type" : "array"
+    }
+  },
+  "title" : "What wallet answers (granite-answer/1)"
+}

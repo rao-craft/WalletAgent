@@ -1,0 +1,18 @@
+{
+  "name": "Wallet",
+  "tagline": "A credits wallet for any app: the balance and earnings, totals, group and exchange cards, cashouts and their sheets, from the app's own types.",
+  "category": "developer",
+  "keywords": [
+    "swiftui",
+    "wallet",
+    "credits",
+    "earnings",
+    "payouts",
+    "granite",
+    "kit"
+  ],
+  "platforms": [
+    "macOS 14"
+  ],
+  "license": "MIT"
+}

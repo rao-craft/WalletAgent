@@ -1,0 +1,225 @@
+{
+  "agent" : {
+    "word" : "wallet"
+  },
+  "conformances" : [
+    "Wallet: wallet",
+    "ModelEarning: group",
+    "CreditExchange: exchange",
+    "Cashout: transaction"
+  ],
+  "expected" : [
+    {
+      "kind" : "view",
+      "name" : "WalletView"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletEyebrow"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletCloseButton"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletHeroView"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletTotalsView"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletSection"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletGroupCard"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletExchangeCard"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletExchangeRow"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletTransactionRow"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletExchangesSheet"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletExchangeSheet"
+    },
+    {
+      "kind" : "conformance",
+      "name" : "Wallet"
+    },
+    {
+      "kind" : "conformance",
+      "name" : "ModelEarning"
+    },
+    {
+      "kind" : "conformance",
+      "name" : "CreditExchange"
+    },
+    {
+      "kind" : "conformance",
+      "name" : "Cashout"
+    }
+  ],
+  "format" : "granite-answer/1",
+  "made" : [
+    {
+      "kind" : "view",
+      "name" : "WalletView",
+      "path" : "Components/Wallet/WalletView.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletEyebrow",
+      "path" : "Components/Wallet/WalletEyebrow.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletCloseButton",
+      "path" : "Components/Wallet/WalletCloseButton.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletHeroView",
+      "path" : "Components/Wallet/WalletHeroView.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletTotalsView",
+      "path" : "Components/Wallet/WalletTotalsView.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletSection",
+      "path" : "Components/Wallet/WalletSection.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletGroupCard",
+      "path" : "Components/Wallet/WalletGroupCard.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletExchangeCard",
+      "path" : "Components/Wallet/WalletExchangeCard.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletExchangeRow",
+      "path" : "Components/Wallet/WalletExchangeRow.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletTransactionRow",
+      "path" : "Components/Wallet/WalletTransactionRow.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletExchangesSheet",
+      "path" : "Components/Wallet/WalletExchangesSheet.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "view",
+      "name" : "WalletExchangeSheet",
+      "path" : "Components/Wallet/WalletExchangeSheet.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "conformance",
+      "name" : "Wallet",
+      "path" : "Components/Wallet/Conformances/Wallet+Wallet.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "conformance",
+      "name" : "ModelEarning",
+      "path" : "Components/Wallet/Conformances/ModelEarning+Group.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "conformance",
+      "name" : "CreditExchange",
+      "path" : "Components/Wallet/Conformances/CreditExchange+Exchange.swift",
+      "state" : "written"
+    },
+    {
+      "kind" : "conformance",
+      "name" : "Cashout",
+      "path" : "Components/Wallet/Conformances/Cashout+Transaction.swift",
+      "state" : "written"
+    }
+  ],
+  "notes" : [
+
+  ],
+  "path" : "Components/Wallet/WalletProtocols.swift",
+  "paths" : [
+    "Components/Wallet/WalletProtocols.swift",
+    "Components/Wallet/WalletValue.swift",
+    "Components/Wallet/WalletLook.swift",
+    "Components/Wallet/WalletStrings.swift",
+    "Components/Wallet/WalletLaunch.swift",
+    "Components/Wallet/WalletSupport.swift",
+    "Components/Wallet/WalletEyebrow.swift",
+    "Components/Wallet/WalletCloseButton.swift",
+    "Components/Wallet/WalletHeroView.swift",
+    "Components/Wallet/WalletTotalsView.swift",
+    "Components/Wallet/WalletSection.swift",
+    "Components/Wallet/WalletGroupCard.swift",
+    "Components/Wallet/WalletExchangeCard.swift",
+    "Components/Wallet/WalletExchangeRow.swift",
+    "Components/Wallet/WalletTransactionRow.swift",
+    "Components/Wallet/WalletExchangesSheet.swift",
+    "Components/Wallet/WalletExchangeSheet.swift",
+    "Components/Wallet/WalletView.swift",
+    "Components/Wallet/WalletPreviews.swift",
+    "Components/Wallet/Conformances/Wallet+Wallet.swift",
+    "Components/Wallet/Conformances/ModelEarning+Group.swift",
+    "Components/Wallet/Conformances/CreditExchange+Exchange.swift",
+    "Components/Wallet/Conformances/Cashout+Transaction.swift"
+  ],
+  "problems" : [
+
+  ],
+  "roots" : [
+    "WalletView(wallet: Wallet?, load: (() async throws -> Void)? = nil, close: (() -> Void)? = nil)"
+  ],
+  "views" : [
+    "WalletView",
+    "WalletEyebrow",
+    "WalletCloseButton",
+    "WalletHeroView",
+    "WalletTotalsView",
+    "WalletSection",
+    "WalletGroupCard",
+    "WalletExchangeCard",
+    "WalletExchangeRow",
+    "WalletTransactionRow",
+    "WalletExchangesSheet",
+    "WalletExchangeSheet"
+  ]
+}
